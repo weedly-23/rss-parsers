@@ -1,15 +1,20 @@
 import time
+from typing import Any
 
 import structlog
+
+from rssparser.api.client import ApiClient
 
 logger = structlog.getLogger(__name__)
 
 
 class Worker:
 
-    def __init__(self, period: int = 60) -> None:
+    def __init__(self, url: str, period: int = 60) -> None:
         self._is_working = False
         self._period = period
+        self._client = ApiClient(url)
+        self._feeds: list[dict[str, Any]] = []
 
     def start(self) -> None:
         if self._is_working:
@@ -29,3 +34,23 @@ class Worker:
 
     def _work(self) -> None:
         logger.info('check feeds and grab all of them')
+        self._feeds = self._client.feeds.get_all()
+
+        for feed in self._feeds:
+            logger.info('get rss from feed', feed=feed)
+
+            # emulate articles received from feed
+            articles: list[dict[str, Any]] = [{
+                'uid': 1,
+                'title': 'some article',
+                'description': 'something interesting',
+            }]
+
+            for article in articles:
+                self._client.articles.add(
+                    feed_id=feed['uid'],
+                    title=article['title'],
+                    description=article['description'],
+                )
+
+            logger.info('feed processed', feed=feed, articles=len(articles))
