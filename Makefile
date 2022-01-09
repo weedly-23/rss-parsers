@@ -2,9 +2,9 @@
 export
 
 run:
-	@python -m parser
+	@python -m rssparser
 
 
 lint:
-	@mypy parser
-	@flake8 parser
+	@mypy rssparser
+	@flake8 rssparser

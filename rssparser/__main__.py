@@ -1,18 +1,23 @@
-# standard logging
 import logging
 
-# advanced logging library
 import structlog
 
-# make this only once per project
+from rssparser.worker import Worker
+
 logging.basicConfig(level=logging.DEBUG)
 
-# make it in every class that use logger
 logger = structlog.getLogger(__name__)
 
 
 def main():
     logger.info('start parser')
+    worker = Worker()
+
+    try:
+        worker.start()
+    except KeyboardInterrupt:
+        logger.info('received stop signal')
+        worker.stop()
 
     logger.info('stop parser')
 
