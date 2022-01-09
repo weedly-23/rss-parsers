@@ -2,6 +2,7 @@ import logging
 
 import structlog
 
+from rssparser.config import load_from_env
 from rssparser.worker import Worker
 
 logging.basicConfig(level=logging.DEBUG)
@@ -11,7 +12,8 @@ logger = structlog.getLogger(__name__)
 
 def main():
     logger.info('start parser')
-    worker = Worker(url='http://localhost:5000')
+    config = load_from_env()
+    worker = Worker(config)
 
     try:
         worker.start()

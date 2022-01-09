@@ -5,16 +5,17 @@ import structlog
 
 from rssparser.api.client import ApiClient
 from rssparser.api.models import Feed
+from rssparser.config import AppConfig
 
 logger = structlog.getLogger(__name__)
 
 
 class Worker:
 
-    def __init__(self, url: str, period: int = 60) -> None:
+    def __init__(self, config: AppConfig) -> None:
         self._is_working = False
-        self._period = period
-        self._client = ApiClient(url)
+        self._period = config.period
+        self._client = ApiClient(config.api_url)
         self._feeds: list[Feed] = []
 
     def start(self) -> None:
