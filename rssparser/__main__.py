@@ -11,7 +11,7 @@ logger = structlog.getLogger(__name__)
 
 def main():
     logger.info('start parser')
-    worker = Worker()
+    worker = Worker(url='http://localhost:5000')
 
     try:
         worker.start()

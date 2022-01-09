@@ -4,6 +4,7 @@ from typing import Any
 import structlog
 
 from rssparser.api.client import ApiClient
+from rssparser.api.models import Feed
 
 logger = structlog.getLogger(__name__)
 
@@ -14,7 +15,7 @@ class Worker:
         self._is_working = False
         self._period = period
         self._client = ApiClient(url)
-        self._feeds: list[dict[str, Any]] = []
+        self._feeds: list[Feed] = []
 
     def start(self) -> None:
         if self._is_working:
@@ -37,7 +38,7 @@ class Worker:
         self._feeds = self._client.feeds.get_all()
 
         for feed in self._feeds:
-            logger.info('get rss from feed', feed=feed)
+            logger.info('get rss from feed', feed=feed.uid)
 
             # emulate articles received from feed
             articles: list[dict[str, Any]] = [{
@@ -48,9 +49,9 @@ class Worker:
 
             for article in articles:
                 self._client.articles.add(
-                    feed_id=feed['uid'],
+                    feed_id=feed.uid,
                     title=article['title'],
                     description=article['description'],
                 )
 
-            logger.info('feed processed', feed=feed, articles=len(articles))
+            logger.info('feed processed', feed=feed.uid, articles=len(articles))
