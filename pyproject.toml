@@ -9,10 +9,12 @@ python = "^3.9"
 
 # http client to call web api
 httpx = "^0.21.3"
+requests = "^2.27.1"
 
 # logging
 structlog = "^21.5.0"
 pydantic = "^1.9.0"
+arrow = "^1.2.1"
 
 [tool.poetry.dev-dependencies]
 # linters
@@ -22,7 +24,13 @@ wemake-python-styleguide = "^0.16.0"
 # for colorful logging
 rich = "^11.0.0"
 colorama = "^0.4.4"
+flake8 = "^4.0.1"
+autopep8 = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# rss-parser
+feedparser = "^6.0.8"
+
