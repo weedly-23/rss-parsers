@@ -32,6 +32,3 @@ feedparser = "^6.0.8"
 
 #datetime
 arrow = "^1.2.1"
-
-[mypy-feedparser.*]
-ignore_missing_imports = True
