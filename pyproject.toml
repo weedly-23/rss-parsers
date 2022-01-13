@@ -26,3 +26,12 @@ colorama = "^0.4.4"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# rss-parser
+feedparser = "^6.0.8"
+
+#datetime
+arrow = "^1.2.1"
+
+[mypy-feedparser.*]
+ignore_missing_imports = True

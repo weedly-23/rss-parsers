@@ -1,9 +1,9 @@
 {
     "python.linting.flake8Enabled": true,
     "python.linting.mypyEnabled": true,
-
-    "editor.rulers": [99],
-
+    "editor.rulers": [
+        99
+    ],
     "search.exclude": {
         "# Byte-compiled / optimized / DLL files": true,
         "**/__pycache__": true,
@@ -213,5 +213,6 @@
         "dmypy.json": true,
         "# Pyre type checker": true,
         ".pyre/": true
-    }
+    },
+    "python.linting.enabled": false
 }
