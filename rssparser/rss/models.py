@@ -12,6 +12,7 @@ class Article(BaseModel):
     title: str
     link: str
     author: Optional[str]
+    author_id: Optional[int]
     published: arrow.Arrow = Field(default_factory=datetime.utcnow, alias='published_parsed')
     description: Optional[str]
 

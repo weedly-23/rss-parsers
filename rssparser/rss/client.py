@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import httpx
 import feedparser
 import structlog
 
@@ -15,10 +16,11 @@ class Client:
         self.last_published = last_published
 
     def parse(self) -> list[Article]:
-        feed = feedparser.parse(self.url)
-        if feed['bozo']:
-            logger.error(f'неправильная rss ссылыка --- {feed["bozo_exception"]}')
-            raise ValueError(f'неправильная rss ссылыка --- {feed["bozo_exception"]}')
-
+        resp = httpx.get(self.url)
+        feed = feedparser.parse(resp.text)
         articles = feed['entries']
+
+        if not articles:
+            raise ValueError(f'No articles in {self.url}')
+
         return [Article(**article) for article in articles]

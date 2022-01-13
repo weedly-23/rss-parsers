@@ -1,3 +1,5 @@
+from logging import log
+from re import S
 import time
 
 import structlog
@@ -34,7 +36,7 @@ class Worker:
         self._is_working = False
 
     def _update_feeds(self) -> None:
-        feeds = self._client.feeds.get_all()
+        feeds = self._client.feeds.get_all_rss()
 
         # TODO: check deleted and modified feeds later
         for feed in feeds:
@@ -52,10 +54,22 @@ class Worker:
             articles = feed.parse()
 
             for article in articles:
-                self._client.articles.add(
-                    feed_id=feed_id,
-                    title=article.title,
-                    description=article.description,
-                )
+                if article.author:
 
-            logger.info('feed processed', feed=feed_id, articles=len(articles))
+                    if self._client.authors.author_exists(article.author, feed_id):
+                        article.author_id = self._client.authors.get_by_name(article.author,
+                                                                             feed_id).uid
+                    else:
+                        article.author_id = self._client.authors.add_author(article.author,
+                                                                            feed_id).uid
+
+                logger.warning('вот готовая к добавлению статья')
+                logger.warning(article)
+
+                # check if exists
+                if not self._client.articles.check_if_exists(
+                    article.author_id, article.link
+                ):
+                    logger.warning(f"Добавляем статью в БД --- {article.title}")
+
+                # TODO: add_article
