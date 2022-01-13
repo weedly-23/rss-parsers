@@ -1,7 +1,7 @@
 from datetime import datetime
 
-import httpx
 import feedparser
+import httpx
 import structlog
 
 from rssparser.rss.models import Article

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -14,6 +16,7 @@ class Article(BaseModel):
     title: str
     description: str
     feed_id: int
+    author_id: Optional[int]
 
 
 class Author(BaseModel):

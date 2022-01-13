@@ -9,6 +9,7 @@ python = "^3.9"
 
 # http client to call web api
 httpx = "^0.21.3"
+yarl = "^1.7.2"
 
 # validators / converters
 pydantic = "^1.9.0"

@@ -1,6 +1,5 @@
-from logging import log
-from re import S
 import time
+from typing import Optional
 
 import structlog
 
@@ -50,26 +49,27 @@ class Worker:
         self._update_feeds()
 
         for feed_id, feed in self._feeds.items():
-            logger.info('get rss from feed', feed=feed_id)
-            articles = feed.parse()
+            self._load_feed(feed_id, feed)
 
-            for article in articles:
-                if article.author:
+    def _load_feed(self, feed_id: int, feed: rss.Client) -> None:
+        logger.info('get rss from feed', feed=feed_id)
+        articles = feed.parse()
 
-                    if self._client.authors.author_exists(article.author, feed_id):
-                        article.author_id = self._client.authors.get_by_name(article.author,
-                                                                             feed_id).uid
-                    else:
-                        article.author_id = self._client.authors.add_author(article.author,
-                                                                            feed_id).uid
+        for article in articles:
+            author_id = self._get_author_id(feed_id, article.author)
+            self._client.articles.add(
+                feed_id=feed_id,
+                title=article.title,
+                description=article.description,
+                author_id=author_id,
+            )
 
-                logger.warning('вот готовая к добавлению статья')
-                logger.warning(article)
+    def _get_author_id(self, feed_id: int, name: Optional[str]) -> Optional[int]:
+        if not name:
+            return None
 
-                # check if exists
-                if not self._client.articles.check_if_exists(
-                    article.author_id, article.link
-                ):
-                    logger.warning(f"Добавляем статью в БД --- {article.title}")
+        author = self._client.authors.get_by_name(name, feed_id)
+        if not author:
+            author = self._client.authors.add(name, feed_id)
 
-                # TODO: add_article
+        return author.uid
