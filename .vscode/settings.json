@@ -214,5 +214,4 @@
         "# Pyre type checker": true,
         ".pyre/": true
     },
-    "python.linting.enabled": false
 }
