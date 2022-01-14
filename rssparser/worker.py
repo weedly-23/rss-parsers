@@ -57,11 +57,16 @@ class Worker:
 
         for article in articles:
             author_id = self._get_author_id(feed_id, article.author)
+            logger.debug('----добавляем статью----')
+            logger.debug(article)
+
             self._client.articles.add(
                 feed_id=feed_id,
                 title=article.title,
                 description=article.description,
                 author_id=author_id,
+                url=article.link,
+                published=article.published
             )
 
     def _get_author_id(self, feed_id: int, name: Optional[str]) -> Optional[int]:

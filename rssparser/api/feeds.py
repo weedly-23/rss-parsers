@@ -1,11 +1,12 @@
 import httpx
+from yarl import URL
 
 from rssparser.api.models import Author, Feed
 
 
 class FeedClient:
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: URL) -> None:
         self.url = url
 
     def get_all_rss(self) -> list[Feed]:

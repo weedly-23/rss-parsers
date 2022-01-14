@@ -11,7 +11,7 @@ logger = structlog.getLogger(__name__)
 
 class AuthorClient:
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: URL) -> None:
         self.url = URL(url)
 
     def get_by_name(self, name, feed_id: int) -> Optional[Author]:
