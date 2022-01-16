@@ -1,4 +1,5 @@
 from typing import Optional
+from arrow import Arrow
 
 from pydantic import BaseModel
 
@@ -12,11 +13,16 @@ class Feed(BaseModel):
 
 
 class Article(BaseModel):
-    uid: int
+    uid: Optional[int]
     title: str
-    description: str
+    url: str
+    published: Arrow
     feed_id: int
     author_id: Optional[int]
+    description: Optional[str]
+
+    class Config:
+        arbitrary_types_allowed = True
 
 
 class Author(BaseModel):
