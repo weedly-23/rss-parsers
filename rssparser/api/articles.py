@@ -20,15 +20,16 @@ class ArticleClient:
         description: Optional[str],
         author_id: Optional[int], published: arrow.Arrow,
     ) -> Optional[Article]:
+
         payload = {'title': title, 'url': url,
                    'published': published.for_json(), 'feed_id': feed_id,
-                   'author_id': author_id, 'description': description
+                   'author_id': author_id, 'description': description,
                    }
 
-        url = self.url / 'api/v1/articles/'
+        api_url = self.url / 'api/v1/articles/'
 
         try:
-            req = httpx.post(str(url), json=payload)
+            req = httpx.post(str(api_url), json=payload)
             req.raise_for_status()
 
             req_data = req.json()

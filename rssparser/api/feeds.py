@@ -10,11 +10,13 @@ class FeedClient:
         self.url = url
 
     def get_all_rss(self) -> list[Feed]:
-        raw_feeds = httpx.get(f'{self.url}api/v1/feeds/?rss=1').json()
+        url = self.url / 'api/v1/feeds/'
+        raw_feeds = httpx.get(str(url), params={'rss-only': '1'}).json()
         return [Feed(**article) for article in raw_feeds]
 
     def get_all(self):
-        raw_feeds = httpx.get(f'{self.url}api/v1/feeds/?rss=0').json()
+        url = self.url / 'api/v1/feeds/'
+        raw_feeds = httpx.get(str(url), params={'rss-only': '0'}).json()
         return [Feed(**article) for article in raw_feeds]
 
     def get_authors(self, uid: str) -> list[Author]:
