@@ -7,7 +7,7 @@ from pydantic import BaseModel
 class Feed(BaseModel):
     uid: int
     url: str
-    category: str
+    category: Optional[str]
     is_rss: bool
     name: str
 
