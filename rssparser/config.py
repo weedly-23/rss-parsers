@@ -11,8 +11,9 @@ class AppConfig:
 
 
 def load_from_env() -> AppConfig:
-    url = URL(os.environ['API_URL'])
+    url = URL('http://127.0.0.1:5000/')
+#    url = URL(os.environ['API_URL'])
     return AppConfig(
         api_url=url,
-        period=int(os.getenv('TASK_PERIOD', 60)),
+        period=int(os.getenv('TASK_PERIOD', 2)),
     )

@@ -53,21 +53,25 @@ class Worker:
 
     def _load_feed(self, feed_id: int, feed: rss.Client) -> None:
         logger.info('get rss from feed', feed=feed_id)
-        articles = feed.parse()
+        try:
+            articles = feed.parse()
 
-        for article in articles:
-            author_id = self._get_author_id(feed_id, article.author)
-            logger.debug('----добавляем статью----')
-            logger.debug(article)
+            for article in articles:
+                author_id = self._get_author_id(feed_id, article.author)
+                logger.debug('----добавляем статью----')
+                logger.debug(article)
 
-            self._client.articles.add(
-                feed_id=feed_id,
-                title=article.title,
-                description=article.description,
-                author_id=author_id,
-                url=article.link,
-                published=article.published
-            )
+                self._client.articles.add(
+                    feed_id=feed_id,
+                    title=article.title,
+                    description=article.description,
+                    author_id=author_id,
+                    url=article.link,
+                    published=article.published
+                )
+        except AttributeError as ex:
+            logger.warning(ex)
+            print(feed)
 
     def _get_author_id(self, feed_id: int, name: Optional[str]) -> Optional[int]:
         if not name:
